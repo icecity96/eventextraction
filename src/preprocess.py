@@ -58,11 +58,17 @@ class DataClean(object):
         res_lines = []
         if len(lines) > 2:
             for index, l in enumerate(lines[:-1]):
-                res_lines.append(re.sub(',,', ',', ','.join([str(l), str(lines[index + 1]), time_str])))
+                smaple_dict = {}
+                smaple_dict["text"] = re.sub(',,', ',', ','.join([str(l), str(lines[index + 1])]))
+                smaple_dict['time'] = time_str
+                smaple_dict['labels'] = []
+                res_lines.append(json.dumps(smaple_dict))
         else:
-            lines.append(time_str)
-            lines = [str(l) for l in lines]
-            res_lines.append(re.sub(',,', ',', ','.join(lines)))
+            smaple_dict = {}
+            smaple_dict["text"] = re.sub(',,', ',', ','.join([str(l) for l in lines]))
+            smaple_dict['time'] = time_str
+            smaple_dict['labels'] = []
+            res_lines.append(json.dumps(smaple_dict))
         return res_lines
 
     def run(self):
