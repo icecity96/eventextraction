@@ -7,7 +7,7 @@ class DataClean(object):
 
     def __init__(self):
         """Initial some constants"""
-        self.configuration_path = '/home/user/ubuntu/Project/EventExtraction/config/dataClean.json'
+        self.configuration_path = '/home/ubuntu/Project/EventExtraction/config/dataClean.json'
         self.config = self._load_config()
         self.special_chars = self._special_chars()
         self.startwith_blanks = self._startwith_blanks()
@@ -22,10 +22,10 @@ class DataClean(object):
 
     def _special_chars(self):
         """Get all special characters."""
-        return [line.strip() for line in open(self.config['sepcial_chars'], 'r')]
+        return [line.strip() for line in open(self.config['special_chars'], 'r')]
 
     def _startwith_blanks(self):
-        return [line.strip() for line in open(self.config['startwith_blanks'], 'r')]
+        return tuple([line.strip() for line in open(self.config['startwith_blanks'], 'r')])
 
     def _remove_prefixes(self):
         return [line.strip() for line in open(self.config['remove_prefix'])]
@@ -33,7 +33,7 @@ class DataClean(object):
     def preprocess_line(self, line, sep='\t') -> list:
         """Clean data line by line"""
         # remove zero-width spaces
-        line = line.replace('\u200b')
+        line = line.replace('\u200b', '')
         try:
             title, time_str = tuple(filter(None, line.split(sep)))
         except:
@@ -59,16 +59,15 @@ class DataClean(object):
         if len(lines) > 2:
             for index, l in enumerate(lines[:-1]):
                 smaple_dict = {}
-                smaple_dict["text"] = re.sub(',,', ',', ','.join([str(l), str(lines[index + 1])]))
-                smaple_dict['time'] = time_str
+                smaple_dict["text"] = re.sub(',,', ',', ','.join([str(l), str(lines[index + 1]), time_str]))
                 smaple_dict['labels'] = []
-                res_lines.append(json.dumps(smaple_dict))
+                res_lines.append(json.dumps(smaple_dict) + '\n')
         else:
             smaple_dict = {}
+            lines.append(time_str)
             smaple_dict["text"] = re.sub(',,', ',', ','.join([str(l) for l in lines]))
-            smaple_dict['time'] = time_str
             smaple_dict['labels'] = []
-            res_lines.append(json.dumps(smaple_dict))
+            res_lines.append(json.dumps(smaple_dict) + '\n')
         return res_lines
 
     def run(self):
