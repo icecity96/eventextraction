@@ -251,7 +251,7 @@ class JointProcessor(DataProcessor):
 
     def get_test_examples(self, data_dir):
         return self._create_example(
-            self._read_data(os.path.join(data_dir, "test.txt"), True), "test",
+            self._read_data(os.path.join(data_dir, "test.txt")), "test",
         )
 
     def get_labeles(self):
@@ -399,7 +399,6 @@ class BLSTM_CRF(object):
         :return: scalar loss
         """
         with tf.variable_scope("crf_loss"):
-            '''
             rule = [[0.1 for i in range(15)] for j in range(15)]
             I_index_list = [2,4,6,8,10]
             B_index_list = [1,3,5,7,9]
