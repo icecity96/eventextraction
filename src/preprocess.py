@@ -79,3 +79,7 @@ class DataClean(object):
                 output_file.writelines(line)
         input_file.close()
         output_file.close()
+
+if __name__ == '__main__':
+    cleaner = DataClean()
+    cleaner.run()
