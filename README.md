@@ -14,10 +14,30 @@ wget https://storage.googleapis.com/albert_zh/albert_tiny_489k.zip
 ```
 **Note: This is albert tiny. For more pre-trained albert model, please visit https://github.com/brightmart/albert_zh**
 ### Format your file
+If your data is news data like this:
+```text
+<title> \t timestamp
+鲜丰水果完成红杉领投B轮融资，已拥有1100+家全国门店	2018-01-22
+```
+Simply run the preprocess script.
 ```bash
 python src/preprocess.py
 ```
 After this you need to split your data into train and test(dev) set.
+You will get a json file like below:
+```json
+{
+"text": "<sentence1>,<sentence2>,<timestamp>",
+"labels": [[0, 1, "LOC"], [2, 3, "ORG"], [15, 25, "Cause"]]
+}
+{
+"text": "<sentence1>,<timestamp>",
+"labels": [[0, 1, "LOC"], [2, 3, "ORG"], [14, 24, "Cause"]]
+}
+```
+**Note**: 
+1. You must attach the timestamp (if you do not need it, just treat it as a placeholder)
+2. I have label the sentence pair relationship on the timestamp. (Don't worry, input_fn will process this problem)
 
 ### Train joint learning model
 ```bash
